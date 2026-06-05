@@ -166,7 +166,7 @@ const imgInput = document.querySelector("#image-input");
 const canvasCtx = imageCanvas.getContext("2d");
 const downloadBtn = document.querySelector("#download-btn");
 const resetBtn = document.querySelector("#reset-btn");
-
+const removeBgBtn = document.querySelector("#remove-bg-btn");
 let file = null;
 let image = null;
 
@@ -252,17 +252,60 @@ imgInput.addEventListener("change", (event) => {
   };
 });
 
-// Apply filters
+
+// function applyFilters() {
+//   if (!image) return;
+
+//   canvasCtx.save();
+
+//   canvasCtx.setTransform(1, 0, 0, 1, 0, 0);
+//   canvasCtx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
+
+//   canvasCtx.restore();
+
+//   canvasCtx.setTransform(scale, 0, 0, scale, 0, 0);
+
+//   if (showOriginal) {
+//     canvasCtx.filter = "none";
+//   } else {
+//     canvasCtx.filter = `
+//       brightness(${filters.brightness.value}${filters.brightness.unit})
+//       contrast(${filters.contrast.value}${filters.contrast.unit})
+//       saturate(${filters.saturation.value}${filters.saturation.unit})
+//       hue-rotate(${filters.huRotation.value}${filters.huRotation.unit})
+//       grayscale(${filters.grayscale.value}${filters.grayscale.unit})
+//       sepia(${filters.sepia.value}${filters.sepia.unit})
+//       invert(${filters.invert.value}${filters.invert.unit})
+//       blur(${filters.blur.value}${filters.blur.unit})
+//       opacity(${filters.opacity.value}${filters.opacity.unit})
+//     `;
+//   }
+
+//   canvasCtx.drawImage(image, 0, 0);
+// }
+
 function applyFilters() {
   if (!image) return;
 
+  // Reset canvas before redraw
+  canvasCtx.setTransform(1, 0, 0, 1, 0, 0);
+
   canvasCtx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
 
+  // Apply zoom + pan
+  canvasCtx.setTransform(
+    scale,
+    0,
+    0,
+    scale,
+    translateX,
+    translateY
+  );
+
+  // Apply filters
   if (showOriginal) {
-    // 👇 show original image (no filters)
     canvasCtx.filter = "none";
   } else {
-    // 👇 apply filters
     canvasCtx.filter = `
       brightness(${filters.brightness.value}${filters.brightness.unit})
       contrast(${filters.contrast.value}${filters.contrast.unit})
@@ -276,9 +319,12 @@ function applyFilters() {
     `;
   }
 
+  // Draw image
   canvasCtx.drawImage(image, 0, 0);
-}
 
+  // Reset filter
+  canvasCtx.filter = "none";
+}
 // Reset filters
 resetBtn.addEventListener("click", () => {
   Object.keys(filters).forEach((key) => {
@@ -318,12 +364,119 @@ toggleBtn.addEventListener("click", () => {
 
 // Zoom with mouse wheel
 let scale = 1;
+let translateX = 0;
+let translateY = 0;
+
+let isDragging = false;
+let startX = 0;
+let startY = 0;
+
+// imageCanvas.addEventListener("wheel", (e) => {
+//   e.preventDefault();
+//   scale += e.deltaY * -0.001;
+//   scale = Math.min(Math.max(0.5, scale), 3);
+
+//   canvasCtx.setTransform(scale, 0, 0, scale, 0, 0);
+//   applyFilters();
+// });
 
 imageCanvas.addEventListener("wheel", (e) => {
   e.preventDefault();
-  scale += e.deltaY * -0.001;
-  scale = Math.min(Math.max(0.5, scale), 3);
 
-  canvasCtx.setTransform(scale, 0, 0, scale, 0, 0);
+  const zoomAmount = -e.deltaY * 0.001;
+
+  scale += zoomAmount;
+
+  scale = Math.min(Math.max(0.5, scale), 5);
+
   applyFilters();
 });
+
+// Mouse down
+imageCanvas.addEventListener("mousedown", (e) => {
+  isDragging = true;
+
+  startX = e.clientX - translateX;
+  startY = e.clientY - translateY;
+
+  imageCanvas.style.cursor = "grabbing";
+});
+
+// Mouse move
+window.addEventListener("mousemove", (e) => {
+  if (!isDragging) return;
+
+  translateX = e.clientX - startX;
+  translateY = e.clientY - startY;
+
+  applyFilters();
+});
+
+// Mouse up
+window.addEventListener("mouseup", () => {
+  isDragging = false;
+
+  imageCanvas.style.cursor = "grab";
+});
+
+
+// Remove background using remove.bg API
+async function removeBackground() {
+  if (!file) {
+    alert("Please upload an image first");
+    return;
+  }
+
+  removeBgBtn.innerText = "Removing...";
+  removeBgBtn.disabled = true;
+
+  try {
+    const formData = new FormData();
+
+    formData.append("image_file", file);
+    formData.append("size", "auto");
+
+    const response = await fetch(
+      "https://api.remove.bg/v1.0/removebg",
+      {
+        method: "POST",
+        headers: {
+          "X-Api-Key": "eRHmKDFkmmWhUc3fQyMrHb8D"
+        },
+        body: formData
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Background removal failed");
+    }
+
+    const blob = await response.blob();
+
+    const url = URL.createObjectURL(blob);
+
+    const img = new Image();
+
+    img.src = url;
+
+    img.onload = () => {
+      image = img;
+
+      imageCanvas.width = img.width;
+      imageCanvas.height = img.height;
+
+      applyFilters();
+
+      removeBgBtn.innerText = "Background Removed";
+    };
+
+  } catch (error) {
+    console.error(error);
+
+    alert("Something went wrong");
+  }
+
+  removeBgBtn.disabled = false;
+}
+
+removeBgBtn.addEventListener("click", removeBackground);
