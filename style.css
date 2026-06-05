@@ -15,6 +15,10 @@ main {
 
 }
 
+#image-canvas {
+  cursor: grab;
+}
+
 main section {
     width: 100%;
     padding: var(--padding-2xl);
@@ -174,4 +178,14 @@ main section .right .filter .slider::-webkit-slider-runnable-track {
 
 #toggle-btn:hover {
   background: rgba(104, 50, 50, 0.2);
+}
+#image-canvas {
+  background:
+    linear-gradient(45deg, #ccc 25%, transparent 25%),
+    linear-gradient(-45deg, #ccc 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #ccc 75%),
+    linear-gradient(-45deg, transparent 75%, #ccc 75%);
+    
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 }
