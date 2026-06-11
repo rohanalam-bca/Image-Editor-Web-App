@@ -64,11 +64,11 @@ main section .left {
     flex-direction: column;
     align-items: center;
     gap: var(--gutter-lg);
-    width: 70%;
+   flex: 1;
 }
 
 main section .right {
-    width: 30%;
+     width: 350px;
     background-color: var(--bg--secondary-color);
     padding: var(--padding-lg);
     border-radius: var(--border-radius-lg)
@@ -188,4 +188,75 @@ main section .right .filter .slider::-webkit-slider-runnable-track {
     
   background-size: 20px 20px;
   background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+/* .quality-section {
+  margin-top: var(--margin-lg);
+} */
+
+.quality-section{
+  margin-top:20px;
+}
+
+.quality-section label{
+  display:block;
+  margin-bottom:10px;
+  font-weight:600;
+}
+
+#quality-slider{
+  width:100%;
+}
+
+.compression-info{
+  margin-top:15px;
+  padding:12px;
+  border-radius:10px;
+  background:#050a15;
+}
+
+.compression-info p{
+  margin:5px 0;
+  font-weight:600;
+}
+
+/*mobile responsive */
+.mobile-filter-btn {
+    display: none;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#close-filters {
+    display: none;
+}
+
+
+/* overley  */
+
+.overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,0.5);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: 0.3s;
+
+    z-index: 999;
+}
+
+.overlay.active {
+
+    opacity: 1;
+
+    pointer-events: auto;
 }
