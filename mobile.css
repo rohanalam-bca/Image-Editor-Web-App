@@ -1,0 +1,155 @@
+/* ========================================
+   RESPONSIVE DESIGN - MOBILE & TABLET
+======================================== */
+
+@media (max-width: 768px) {
+
+    /* Main Layout */
+    main section {
+        flex-direction: column;
+        padding: 12px;
+        gap: 15px;
+    }
+
+    /* Left Side */
+    main section .left {
+        width: 100%;
+    }
+
+    /* Right Side (Filters) */
+    main section .right {
+        width: 100%;
+        padding: 15px;
+        border-radius: 12px;
+    }
+
+    /* Buttons Layout */
+    main section .top {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    /* Remove BG Button Full Width */
+    #remove-bg-btn {
+        grid-column: span 2;
+    }
+
+    /* Image Container */
+    main section .buttom {
+        width: 100%;
+        min-height: 350px;
+        padding: 12px;
+        aspect-ratio: auto;
+    }
+
+    /* Canvas */
+    canvas {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        max-height: 60vh;
+    }
+
+    /* Placeholder */
+    main section .buttom .placeholder-image i {
+        font-size: 6rem !important;
+    }
+
+    main section .buttom .placeholder-image p {
+        font-size: 15px;
+        text-align: center;
+    }
+
+    /* Filters */
+    .filters {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .filter {
+        padding: 10px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.03);
+    }
+
+    .filter p {
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+
+    .slider {
+        width: 100%;
+    }
+
+    /* Filters Heading */
+    main section .right h2 {
+        margin-bottom: 15px;
+        font-size: 20px;
+    }
+
+    /* Compression Section */
+    .compression-info {
+        margin-top: 12px;
+    }
+
+    .compression-info p {
+        font-size: 13px;
+    }
+
+}
+
+/* ========================================
+   SMALL PHONES
+======================================== */
+
+@media (max-width: 480px) {
+
+    main section {
+        padding: 8px;
+    }
+
+    .btn {
+        padding: 11px;
+        font-size: 13px;
+    }
+
+    main section .buttom {
+        min-height: 300px;
+    }
+
+    main section .right h2 {
+        font-size: 18px;
+    }
+
+    .filter p {
+        font-size: 13px;
+    }
+
+}
+
+/* ========================================
+   TABLETS
+======================================== */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    main section {
+        flex-direction: column;
+    }
+
+    main section .left,
+    main section .right {
+        width: 100%;
+    }
+
+}
