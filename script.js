@@ -8,6 +8,14 @@ const resetBtn = document.querySelector("#reset-btn");
 const removeBgBtn = document.querySelector("#remove-bg-btn");
 let file = null;
 let image = null;
+// rotation
+let rotation = 0;
+
+let flipX = 1;
+let flipY = 1;
+// redo and undo  
+let history = [];
+let historyIndex = -1;
 
 const filters = {
   brightness: { value: 100, min: 0, max: 200, unit: "%" },
@@ -19,6 +27,203 @@ const filters = {
   invert: { value: 0, min: 0, max: 100, unit: "%" },
   blur: { value: 0, min: 0, max: 20, unit: "px" },
   opacity: { value: 100, min: 0, max: 100, unit: "%" },
+};
+
+// ✅ Presets with all filter values defined for consistency and easier maintenance rohan hero
+const presets = {
+
+  Original: {
+    brightness: 100,
+    contrast: 100,
+    saturation: 100,
+    huRotation: 0,
+    grayscale: 0,
+    sepia: 0,
+    invert: 0,
+    blur: 0,
+    opacity: 100
+  },
+
+  Aesthetic: {
+    brightness: 110,
+    contrast: 105,
+    saturation: 120,
+    huRotation: 10,
+    grayscale: 0,
+    sepia: 10,
+    invert: 0,
+    blur: 0,
+    opacity: 100
+  },
+
+  SoftGlow: {
+    brightness: 115,
+    contrast: 90,
+    saturation: 110,
+    huRotation: 0,
+    grayscale: 0,
+    sepia: 15,
+    invert: 0,
+    blur: 1,
+    opacity: 100
+  },
+
+  Dreamy: {
+    brightness: 120,
+    contrast: 85,
+    saturation: 105,
+    huRotation: 5,
+    grayscale: 0,
+    sepia: 20,
+    invert: 0,
+    blur: 2,
+    opacity: 100
+  },
+
+  Moody: {
+    brightness: 85,
+    contrast: 140,
+    saturation: 90,
+    huRotation: 0,
+    grayscale: 10,
+    sepia: 5,
+    invert: 0,
+    blur: 0,
+    opacity: 100
+  },
+
+  VintageFilm: {
+    brightness: 105,
+    contrast: 115,
+    saturation: 85,
+    huRotation: 0,
+    grayscale: 5,
+    sepia: 35,
+    invert: 0,
+    blur: 0,
+    opacity: 100
+  },
+
+  Pastel: {
+    brightness: 115,
+    contrast: 85,
+    saturation: 90,
+    huRotation: 15,
+    grayscale: 0,
+    sepia: 5,
+    invert: 0,
+    blur: 1,
+    opacity: 100
+  },
+
+  Sunset: {
+    brightness: 110,
+    contrast: 120,
+    saturation: 140,
+    huRotation: 20,
+    grayscale: 0,
+    sepia: 25,
+    invert: 0,
+    blur: 0,
+    opacity: 100
+  },
+
+  Instagram: {
+    brightness: 108,
+    contrast: 125,
+    saturation: 130,
+    huRotation: 5,
+    grayscale: 0,
+    sepia: 10,
+    invert: 0,
+    blur: 0,
+    opacity: 100
+  },
+
+  Korean: {
+    brightness: 118,
+    contrast: 92,
+    saturation: 105,
+    huRotation: 0,
+    grayscale: 0,
+    sepia: 8,
+    invert: 0,
+    blur: 1,
+    opacity: 100
+  },
+
+  Anime: {
+    brightness: 115,
+    contrast: 130,
+    saturation: 160,
+    huRotation: 0,
+    grayscale: 0,
+    sepia: 0,
+    invert: 0,
+    blur: 0,
+    opacity: 100
+  },
+
+  Cyberpunk: {
+  brightness: 110,
+  contrast: 150,
+  saturation: 170,
+  huRotation: 250,
+  grayscale: 0,
+  sepia: 0,
+  invert: 0,
+  blur: 0,
+  opacity: 100
+},
+
+GoldenHour: {
+  brightness: 115,
+  contrast: 110,
+  saturation: 135,
+  huRotation: 25,
+  grayscale: 0,
+  sepia: 30,
+  invert: 0,
+  blur: 0,
+  opacity: 100
+},
+
+DarkAcademia: {
+  brightness: 80,
+  contrast: 145,
+  saturation: 75,
+  huRotation: 0,
+  grayscale: 10,
+  sepia: 25,
+  invert: 0,
+  blur: 0,
+  opacity: 100
+},
+
+FairyTale: {
+  brightness: 125,
+  contrast: 85,
+  saturation: 115,
+  huRotation: 15,
+  grayscale: 0,
+  sepia: 10,
+  invert: 0,
+  blur: 3,
+  opacity: 100
+},
+
+HDR: {
+  brightness: 105,
+  contrast: 155,
+  saturation: 145,
+  huRotation: 0,
+  grayscale: 0,
+  sepia: 0,
+  invert: 0,
+  blur: 0,
+  opacity: 100
+}
+
 };
 
 // ✅ Store default values ONCE
@@ -53,10 +258,17 @@ function createFilterElement(name, unit, value, min, max) {
     label.innerText = `${name}: ${input.value}${unit}`;
 
     applyFilters();
-  });
+    clearTimeout(window.undoTimer);
 
+ window.undoTimer =
+ setTimeout(() => {
+
+  saveState();
+
+}, 400);
+});  
   return div;
-}
+  }
 
 // Create sliders for each filter dynamically based on the filters object
 Object.keys(filters).forEach((filter) => {
@@ -68,6 +280,74 @@ Object.keys(filters).forEach((filter) => {
     filters[filter].max
   );
   filtersContainer.appendChild(el);
+});
+// ✅ Preset names with emojis for better UX rohan hero 
+const presetNames = {
+
+  Original: "🖼 Original",
+  Aesthetic: "✨ Aesthetic",
+  SoftGlow: "🌟 Soft Glow",
+  Dreamy: "💭 Dreamy",
+  Moody: "🌙 Moody",
+  VintageFilm: "🎞 Vintage",
+  Pastel: "🌸 Pastel",
+  Sunset: "🌅 Sunset",
+  Instagram: "📸 Instagram",
+  Korean: "💖 Korean",
+  Anime: "🎨 Anime",
+  Cyberpunk: "🌆 Cyberpunk",
+GoldenHour: "☀️ Golden Hour",
+DarkAcademia: "📚 Dark Academia",
+FairyTale: "🧚 Fairy Tale",
+HDR: "📷 HDR"
+
+};
+
+const presetsContainer =
+document.querySelector(".presets");
+
+Object.keys(presets).forEach((presetName) => {
+
+  const btn =
+  document.createElement("button");
+
+  btn.classList.add("preset-btn");
+
+  btn.innerText =
+  presetNames[presetName];
+
+  btn.addEventListener("click", () => {
+
+    const preset =
+    presets[presetName];
+
+    Object.keys(preset).forEach((key) => {
+
+      filters[key].value =
+      preset[key];
+
+      const slider =
+      document.getElementById(key);
+
+      if (slider) {
+
+        slider.value =
+        preset[key];
+
+        slider.previousElementSibling.innerText =
+          `${key}: ${preset[key]}${filters[key].unit}`;
+
+      }
+
+    });
+
+    applyFilters();
+    saveState();
+
+  });
+
+  presetsContainer.appendChild(btn);
+
 });
 
 // Compression Quality Section
@@ -118,13 +398,35 @@ imgInput.addEventListener("change", (event) => {
   img.src = URL.createObjectURL(file);
 
   img.onload = () => {
-    image = img;
-    imageCanvas.width = img.width;
-    imageCanvas.height = img.height;
+
+  image = img;
+
+  const maxWidth = 1000;
+  const maxHeight = 700;
+
+  let width = img.width;
+  let height = img.height;
+
+  // Scale down if too wide
+  if (width > maxWidth) {
+    height = height * (maxWidth / width);
+    width = maxWidth;
+  }
+
+  // Scale down if too tall
+  if (height > maxHeight) {
+    width = width * (maxHeight / height);
+    height = maxHeight;
+  }
+
+  imageCanvas.width = width;
+  imageCanvas.height = height;
 
   applyFilters();
   updateCompressionInfo();
-  };
+  saveState();
+};
+
 });
 function updateCompressionInfo() {
 
@@ -200,7 +502,39 @@ function applyFilters() {
   }
 
   // Draw image
-  canvasCtx.drawImage(image, 0, 0);
+// canvasCtx.drawImage(
+//   image,
+//   0,
+//   0,
+//   imageCanvas.width,
+//   imageCanvas.height
+// );
+// draw image with rotation 
+canvasCtx.save();
+
+canvasCtx.translate(
+  imageCanvas.width / 2,
+  imageCanvas.height / 2
+);
+
+canvasCtx.rotate(
+  rotation * Math.PI / 180
+);
+
+canvasCtx.scale(
+  flipX,
+  flipY
+);
+
+canvasCtx.drawImage(
+  image,
+  -imageCanvas.width / 2,
+  -imageCanvas.height / 2,
+  imageCanvas.width,
+  imageCanvas.height
+);
+
+canvasCtx.restore();
 
   // Reset filter
   canvasCtx.filter = "none";
@@ -219,6 +553,11 @@ resetBtn.addEventListener("click", () => {
     label.innerText = `${key}: ${filters[key].value}${filters[key].unit}`;
   });
 
+  rotation = 0;
+
+flipX = 1;
+flipY = 1;
+  saveState();
   applyFilters();
 });
 
@@ -232,6 +571,7 @@ downloadBtn.addEventListener("click", () => {
 link.href = imageCanvas.toDataURL("image/jpeg", quality);
   link.click();
 });
+
 
 
 // Toggle original/edited image
@@ -341,6 +681,7 @@ async function removeBackground() {
       imageCanvas.height = img.height;
 
       applyFilters();
+      saveState();
 
       removeBgBtn.innerText = "Background Removed";
     };
@@ -355,6 +696,8 @@ async function removeBackground() {
 }
 
 removeBgBtn.addEventListener("click", removeBackground);
+
+
 
 /// for mobile view rohan 
 
@@ -411,6 +754,8 @@ closeFilters.addEventListener(
   }
 );
 
+
+
 overlay.addEventListener(
   "click",
   () => {
@@ -420,3 +765,211 @@ overlay.addEventListener(
     overlay.classList.remove("active");
   }
 );
+
+
+
+
+// rotation buttons
+
+const rotateRightBtn =
+document.querySelector(
+"#rotate-right-btn"
+);
+
+rotateRightBtn.addEventListener(
+"click",
+() => {
+
+    rotation += 90;
+
+    applyFilters();
+
+    saveState();
+
+});
+// flip buttons
+const rotateLeftBtn =
+document.querySelector(
+"#rotate-left-btn"
+);
+
+rotateLeftBtn.addEventListener(
+"click",
+() => {
+
+    rotation -= 90;
+   applyFilters();
+   saveState();
+
+});
+
+// flip horizontal 
+const flipHorizontalBtn =
+document.querySelector(
+"#flip-horizontal-btn"
+);
+
+flipHorizontalBtn.addEventListener(
+"click",
+() => {
+
+    flipX *= -1;
+
+    applyFilters();
+    saveState();
+
+});
+
+// flip vertical
+const flipVerticalBtn =
+document.querySelector(
+"#flip-vertical-btn"
+);
+
+flipVerticalBtn.addEventListener(
+"click",
+() => {
+
+    flipY *= -1;
+
+    applyFilters();
+    saveState();
+
+});
+
+// save function state to history for undo/redo
+
+function saveState() {
+
+  if (!image) return;
+
+  const state = {
+
+    imageSrc: image.src,
+
+    filters: JSON.parse(
+      JSON.stringify(filters)
+    ),
+
+    rotation: rotation,
+
+    flipX: flipX,
+
+    flipY: flipY
+
+  };
+
+  history = history.slice(
+    0,
+    historyIndex + 1
+  );
+
+  history.push(state);
+
+  historyIndex++;
+
+}
+// Create Restore State Function
+
+function restoreState(state) {
+
+  const img = new Image();
+
+  img.src = state.imageSrc;
+
+  img.onload = () => {
+
+    image = img;
+
+    const maxWidth = 1000;
+    const maxHeight = 700;
+
+    let width = img.width;
+    let height = img.height;
+
+    if (width > maxWidth) {
+
+      height *= maxWidth / width;
+
+      width = maxWidth;
+
+    }
+
+    if (height > maxHeight) {
+
+      width *= maxHeight / height;
+
+      height = maxHeight;
+
+    }
+
+    imageCanvas.width = width;
+
+    imageCanvas.height = height;
+
+    rotation = state.rotation;
+
+    flipX = state.flipX;
+
+    flipY = state.flipY;
+
+    Object.keys(filters).forEach((key) => {
+
+      filters[key].value =
+      state.filters[key].value;
+
+      const slider =
+      document.getElementById(key);
+
+      if (slider) {
+
+        slider.value =
+        filters[key].value;
+
+        slider.previousElementSibling.innerText =
+          `${key}: ${filters[key].value}${filters[key].unit}`;
+
+      }
+
+    });
+
+    applyFilters();
+
+  };
+
+}
+// Undo and Buttons
+const undoBtn =
+document.querySelector("#undo-btn");
+
+undoBtn.addEventListener("click", () => {
+
+  if (historyIndex <= 0)
+    return;
+
+  historyIndex--;
+
+  restoreState(
+    history[historyIndex]
+  );
+
+});
+// Redo Button
+const redoBtn =
+document.querySelector("#redo-btn");
+
+redoBtn.addEventListener("click", () => {
+
+  if (
+    historyIndex >=
+    history.length - 1
+  ) return;
+
+  historyIndex++;
+
+  restoreState(
+    history[historyIndex]
+  );
+
+});
+
