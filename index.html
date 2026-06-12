@@ -16,7 +16,7 @@
         <section>
             <div class="left">
                 <div class="top">
-                    <label for="image-input" class="btn">
+                    <label for="image-input" id="white" class="btn">
                         Choose image
                         <input type="file" id="image-input" accept="image/*" hidden>
                     </label>
@@ -26,9 +26,35 @@
                     <button class="btn" id="remove-bg-btn">
                         Remove Background
                     </button>
+
+                    <button class="btn" id="rotate-left-btn">
+                        ↺ Rotate
+                    </button>
+
+                    <button class="btn" id="rotate-right-btn">
+                        ↻ Rotate
+                    </button>
+
+                    <button class="btn" id="flip-horizontal-btn">
+                        ↔ Flip H
+                    </button>
+
+                    <button class="btn" id="flip-vertical-btn">
+                        ↕ Flip V
+                    </button>
+                    <button class="btn" id="undo-btn">
+                        Undo
+                    </button>
+
+                    <button class="btn" id="redo-btn">
+                        Redo
+                    </button>
+
+
+
                     <button class="btn mobile-filter-btn">
-    🎛 Filters
-</button>
+                        🎛 Filters
+                    </button>
                 </div>
                 <div class="buttom">
                     <div class="placeholder-image">
@@ -38,34 +64,33 @@
                     <canvas id="image-canvas" style="display:none;"> </canvas>
                 </div>
             </div>
-           <div class="right">
+            <div class="right">
+                <div class="filter-header">
 
-    <div class="filter-header">
-        <h2>Filters</h2>
 
-        <button id="close-filters">
-            ✕
-        </button>
-    </div>
+                    <div class="presets"></div>
+
+                    <button id="close-filters">
+                        ✕
+                    </button>
+                </div>
                 <div class="filters">
-
-
+                    <h2 style="align-items: center;">Filters</h2>
                     <div class="filter">
 
                     </div>
-
-
                 </div>
-            </div>
 
-            
+
         </section>
-       
+
     </main>
 
-    <script src="script.js"></script>
 
     <div class="overlay"></div>
+    <script src="script.js"></script>
+
+
 </body>
 
 </html>
