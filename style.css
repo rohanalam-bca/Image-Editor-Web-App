@@ -32,13 +32,33 @@ html {
     color: var(--text-primary-color);
 }
 
-main section .top {
+/* main section .top {
     display: flex;
     align-items: center;
     gap: var(--gutter-lg);
 
-}
+} */
 
+main section .top {
+
+    width: 100%;
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 12px;
+
+    background: var(--bg--secondary-color);
+
+    border-radius: var(--border-radius-lg);
+
+}
+/* 
 .btn {
     padding: var(--padding-sm) var(--padding-lg);
     border-radius: var(--border-radius-md);
@@ -47,6 +67,30 @@ main section .top {
     background-color: var(--bg-active-color);
     cursor: pointer;
     color: var(--text-active-color);
+} */
+
+.btn {
+
+    min-width: 90px;
+
+    height: 37px;
+
+    padding: 0 16px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    white-space: nowrap;
+
 }
 
 #reset-btn {
@@ -75,14 +119,25 @@ main section .right {
 }
 
 main section .buttom {
-    display: flex;
+    /* display: flex;
     justify-content: center;
     align-items: center;
     background-color: var(--bg--secondary-color);
     width: 100%;
     padding: var(--padding-2xl);
     aspect-ratio: 5/3;
-    border-radius: var(--border-radius-xl);
+    border-radius: var(--border-radius-xl); */
+    
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+    min-height:500px;
+    padding:20px;
+    overflow:hidden;
+    border-radius:var(--border-radius-xl);
+    background-color:var(--bg--secondary-color);
+
 
 }
 main section .buttom .placeholder-image{
@@ -141,8 +196,15 @@ main section .right .filter #brightness::-webkit-slider-runnable-track {
 }
 canvas{
     /* background-color: red; */
-    max-width: 90%;
-    max-height: 80vh;
+    /* max-width: 90%;
+    max-height: 80vh; */
+    canvas{
+    display:block;
+    max-width:100%;
+    max-height:70vh;
+    width:auto;
+    height:auto;
+}
 }
 main section .right .filter .slider {
     width: 100%;
@@ -259,4 +321,103 @@ main section .right .filter .slider::-webkit-slider-runnable-track {
     opacity: 1;
 
     pointer-events: auto;
+}
+/* .presets {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+
+} */
+
+.presets{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:9px;
+
+    margin-bottom:20px;
+
+}
+
+/* .preset-btn {
+
+    border: none;
+
+    padding: 10px 16px;
+
+    border-radius: 999px;
+
+    cursor: pointer;
+
+    background: #1f2937;
+
+    color: white;
+
+    transition: 0.3s ease;
+
+    font-size: 13px;
+
+} */
+ 
+
+/* .preset-btn:hover {
+
+    transform: translateY(-2px);
+
+    opacity: 0.9;
+
+} */
+
+.preset-btn{
+
+    width:100%;
+
+    height: 40px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font: size 11px;
+
+    font-weight:500;
+
+    color:white;
+
+    background:linear-gradient(
+        135deg,
+        #0f172a,
+        #1e293b
+    );
+
+    transition:.3s ease;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+}
+
+.preset-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 5px 15px rgba(0,0,0,.3);
+
+}
+
+.preset-btn:active {
+
+    transform: scale(0.95);
+
 }
