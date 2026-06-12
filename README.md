@@ -1,6 +1,6 @@
 # 🎨 Image Editor Pro
 
-A modern web-based image editor built with **HTML, CSS, and JavaScript** using the **Canvas API**. This application allows users to upload images, apply real-time filters, zoom and pan images, compare original and edited versions, download edited images, and remove backgrounds using AI.
+A modern web-based image editor built with **HTML, CSS, and JavaScript** using the **Canvas API**. This application allows users to upload images, apply real-time filters, zoom and pan images, compare original and edited versions, remove backgrounds using AI, rotate and flip images, compress images, and download edited results.
 
 ---
 
@@ -10,6 +10,7 @@ A modern web-based image editor built with **HTML, CSS, and JavaScript** using t
 
 * Upload images directly from your device
 * Instant image preview on canvas
+* Supports common image formats
 
 ### 🎚 Real-Time Filters
 
@@ -22,6 +23,25 @@ A modern web-based image editor built with **HTML, CSS, and JavaScript** using t
 * Invert
 * Blur
 * Opacity
+
+### ✨ One-Click Presets
+
+* Original
+* Aesthetic
+* Soft Glow
+* Dreamy
+* Moody
+* Vintage
+* Pastel
+* Sunset
+* Instagram
+* Korean
+* Anime
+* Cyberpunk
+* Golden Hour
+* Dark Academia
+* Fairy Tale
+* HDR
 
 ### 🔍 Zoom & Pan
 
@@ -45,10 +65,29 @@ A modern web-based image editor built with **HTML, CSS, and JavaScript** using t
 * Powered by Remove.bg API
 * Transparent PNG output
 
+### 🔄 Rotate & Flip
+
+* Rotate image left
+* Rotate image right
+* Flip horizontally
+* Flip vertically
+
+### 📦 Image Compression
+
+* Adjust image quality
+* Reduce image size (KB/MB)
+* Real-time size estimation
+
 ### 💾 Download Edited Image
 
 * Export edited image as PNG
 * High-quality image output
+
+### 📱 Responsive Design
+
+* Desktop-friendly interface
+* Mobile responsive layout
+* Optimized editing experience
 
 ---
 
@@ -69,6 +108,8 @@ Image-Editor-Pro/
 │
 ├── index.html
 ├── style.css
+├── mobile.css
+├── theme.css
 ├── script.js
 ├── assets/
 └── README.md
@@ -108,7 +149,7 @@ This project uses Remove.bg API for AI background removal.
 
 ```javascript
 headers: {
-  "X-Api-Key": "*******************"
+  "X-Api-Key": "YOUR_API_KEY"
 }
 ```
 
@@ -121,13 +162,20 @@ headers: {
 | Feature               | Status |
 | --------------------- | ------ |
 | Image Upload          | ✅      |
-| Filters               | ✅      |
+| Real-Time Filters     | ✅      |
+| Presets               | ✅      |
 | Zoom                  | ✅      |
 | Pan                   | ✅      |
 | Before / After        | ✅      |
 | Reset                 | ✅      |
 | Download              | ✅      |
 | AI Background Removal | ✅      |
+| Rotate Left           | ✅      |
+| Rotate Right          | ✅      |
+| Flip Horizontal       | ✅      |
+| Flip Vertical         | ✅      |
+| Image Compression     | ✅      |
+| Mobile Responsive UI  | ✅      |
 
 ---
 
@@ -135,14 +183,17 @@ headers: {
 
 ### Version 2.0
 
-* Undo / Redo
-* Rotate Image
-* Flip Image
-* Crop Tool
+* Professional Undo / Redo System
+* Drag & Drop Image Upload
+* Real Crop Tool (Selection Box Crop)
+* Keyboard Shortcuts
+* Session Auto Save
 
 ### Version 3.0
 
 * Text Tool
+* Text Styling
+* Watermark Tool
 * Drawing Tool
 * Shape Tool
 * Sticker Support
@@ -151,15 +202,17 @@ headers: {
 
 * Layer System
 * Save Projects
-* Export Quality Settings
-* Mobile Touch Support
+* Export as JPG / PNG / WEBP
+* Custom Canvas Size
+* Mobile Touch Gestures
 
 ### Version 5.0
 
 * AI Image Enhancement
 * AI Object Removal
 * AI Background Blur
-* Advanced Editing Tools
+* AI Color Correction
+* AI Upscaling
 
 ---
 
@@ -173,6 +226,7 @@ This project helped me learn:
 * Image Processing
 * API Integration
 * State Management
+* Responsive Web Design
 * Frontend Development
 
 ---
@@ -200,10 +254,15 @@ This project is licensed under the MIT License.
 
 Aspiring Full Stack Developer
 
-* LinkedIn: https://www.linkedin.com/in/rohan-alam-jalpaiguri/
-* Email: [rohanalam402@gmail.com](mailto:rohanalam402@gmail.com)
+LinkedIn:
+https://www.linkedin.com/in/rohan-alam-jalpaiguri/
+
+Email:
+[rohanalam402@gmail.com](mailto:rohanalam402@gmail.com)
+
+GitHub:
+https://github.com/rohanalam-bca
 
 ---
 
 ⭐ If you found this project useful, consider giving it a star on GitHub!
-
