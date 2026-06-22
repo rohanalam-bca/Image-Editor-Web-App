@@ -1,0 +1,47 @@
+.caption-section{
+    margin-top:20px;
+}
+
+#caption-style{
+    width:100%;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:10px;
+}
+
+#caption-output{
+    margin-top:10px;
+    min-height:70px;
+    padding:12px;
+    border-radius:10px;
+    background:#111827;
+    color:white;
+    line-height:1.5;
+}
+
+#copy-caption-btn{
+    margin-top:10px;
+}
+
+
+.newbtn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.35);
+}
+
+.newbtn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 12px 28px rgba(102, 126, 234, 0.5);
+}
+
+.newbtn:active {
+    transform: translateY(0) scale(0.98);
+}

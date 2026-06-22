@@ -1,0 +1,16 @@
+
+#remove-bg-btn{
+    background: linear-gradient(135deg,#F97316,#EA580C);
+    color:white;
+    border:none;
+    padding:12px 22px;
+    border-radius:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+#remove-bg-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(249,115,22,.4);
+}
