@@ -1,4 +1,3 @@
-
 let showOriginal = false;
 const imageCanvas = document.querySelector("#image-canvas");
 const imgInput = document.querySelector("#image-input");
@@ -8,6 +7,7 @@ const resetBtn = document.querySelector("#reset-btn");
 const removeBgBtn = document.querySelector("#remove-bg-btn");
 let file = null;
 let image = null;
+let originalImage = null;
 // rotation
 let rotation = 0;
 
@@ -398,8 +398,8 @@ imgInput.addEventListener("change", (event) => {
   img.src = URL.createObjectURL(file);
 
   img.onload = () => {
-
-  image = img;
+image = img;
+  originalImage = img;
 
   const maxWidth = 1000;
   const maxHeight = 700;
@@ -510,6 +510,38 @@ function applyFilters() {
 //   imageCanvas.height
 // );
 // draw image with rotation 
+// canvasCtx.save();
+
+// canvasCtx.translate(
+//   imageCanvas.width / 2,
+//   imageCanvas.height / 2
+// );
+
+// canvasCtx.rotate(
+//   rotation * Math.PI / 180
+// );
+
+// canvasCtx.scale(
+//   flipX,
+//   flipY
+// );
+
+// canvasCtx.drawImage(
+//   image,
+//   -imageCanvas.width / 2,
+//   -imageCanvas.height / 2,
+//   imageCanvas.width,
+//   imageCanvas.height
+// );
+
+// canvasCtx.restore();
+
+// draw image with rotation and flipping
+const imageToDraw =
+showOriginal
+? originalImage
+: image;
+
 canvasCtx.save();
 
 canvasCtx.translate(
@@ -517,17 +549,21 @@ canvasCtx.translate(
   imageCanvas.height / 2
 );
 
-canvasCtx.rotate(
-  rotation * Math.PI / 180
-);
+if(!showOriginal){
 
-canvasCtx.scale(
-  flipX,
-  flipY
-);
+  canvasCtx.rotate(
+    rotation * Math.PI / 180
+  );
+
+  canvasCtx.scale(
+    flipX,
+    flipY
+  );
+
+}
 
 canvasCtx.drawImage(
-  image,
+  imageToDraw,
   -imageCanvas.width / 2,
   -imageCanvas.height / 2,
   imageCanvas.width,
@@ -536,32 +572,35 @@ canvasCtx.drawImage(
 
 canvasCtx.restore();
 
+/// 
+
   // Reset filter
   canvasCtx.filter = "none";
   //
   updateCompressionInfo();
 }
-// Reset filters
-resetBtn.addEventListener("click", () => {
-  Object.keys(filters).forEach((key) => {
-    filters[key].value = defaultFilters[key].value;
+// reset button   
 
-    const input = document.getElementById(key);
-    const label = input.previousElementSibling;
+// resetBtn.addEventListener("click", () => {
+//   Object.keys(filters).forEach((key) => {
+//     filters[key].value = defaultFilters[key].value;
 
-    input.value = filters[key].value;
-    label.innerText = `${key}: ${filters[key].value}${filters[key].unit}`;
-  });
+//     const input = document.getElementById(key);
+//     const label = input.previousElementSibling;
 
-  rotation = 0;
+//     input.value = filters[key].value;
+//     label.innerText = `${key}: ${filters[key].value}${filters[key].unit}`;
+//   });
 
-flipX = 1;
-flipY = 1;
-  saveState();
-  applyFilters();
-});
+//   rotation = 0;
 
-// Download image
+// flipX = 1;
+// flipY = 1;
+//   saveState();
+//   applyFilters();
+// });
+
+// // Download image
 downloadBtn.addEventListener("click", () => {
   if (!image) return;
 
@@ -570,6 +609,45 @@ downloadBtn.addEventListener("click", () => {
   const quality = Number(qualitySlider.value);
 link.href = imageCanvas.toDataURL("image/jpeg", quality);
   link.click();
+});
+
+resetBtn.addEventListener("click", () => {
+
+  Object.keys(filters).forEach((key) => {
+
+    filters[key].value =
+      defaultFilters[key].value;
+
+    const input =
+      document.getElementById(key);
+
+    const label =
+      input.previousElementSibling;
+
+    input.value =
+      filters[key].value;
+
+    label.innerText =
+      `${key}: ${filters[key].value}${filters[key].unit}`;
+
+  });
+
+  rotation = 0;
+
+  flipX = 1;
+  flipY = 1;
+
+  scale = 1;
+
+  translateX = 0;
+  translateY = 0;
+
+  image = originalImage;
+
+  showOriginal = false;
+
+  applyFilters();
+
 });
 
 
@@ -972,4 +1050,177 @@ redoBtn.addEventListener("click", () => {
   );
 
 });
+
+
+
+/////////////////////////////////////
+// Ai feature . js 
+
+// ================================
+// GEMINI VISION CAPTION GENER ATOR
+// ================================
+
+// Use your Gemini API Key
+const GEMINI_API_KEY = "AQ.Ab8RN6IlX_eID-Sr4kae28mNXhF51xeXPLGRTzzdUdXApNXUyQ";
+
+// Convert image file to Base64
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      resolve(reader.result.split(",")[1]);
+    };
+
+    reader.onerror = reject;
+
+    reader.readAsDataURL(file);
+  });
+}
+
+// Generate Caption
+async function generateCaption() {
+
+  // Check image uploaded
+  if (!file) {
+    alert("Upload an image first");
+    return;
+  }
+
+  const style =
+    document.getElementById("caption-style").value;
+
+  const output =
+    document.getElementById("caption-output");
+
+  output.innerText =
+    "🔄 Analyzing image and generating caption...";
+
+  try {
+
+    // Convert image to base64
+    const imageBase64 =
+      await fileToBase64(file);
+
+    const response =
+      await fetch(
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+            "X-goog-api-key": GEMINI_API_KEY
+          },
+
+          body: JSON.stringify({
+
+            contents: [
+
+              {
+
+                parts: [
+
+                  {
+                    text:
+
+`Analyze this image carefully and generate ONE short social media caption in ${style} style.
+
+Rules:
+- Maximum 20 words
+- Add emojis if suitable
+- Caption should match image content
+- Do not explain the image
+- Return only the caption`
+                  },
+
+                  {
+
+                    inline_data: {
+
+                      mime_type: file.type,
+
+                      data: imageBase64
+
+                    }
+
+                  }
+
+                ]
+
+              }
+
+            ]
+
+          })
+
+        }
+      );
+
+    const data =
+      await response.json();
+
+    console.log(data);
+
+    if (
+      data.candidates &&
+      data.candidates.length > 0
+    ) {
+
+      output.innerText =
+        data.candidates[0]
+        .content.parts[0]
+        .text;
+
+    } else {
+
+      output.innerText =
+        "❌ Failed to generate caption.";
+
+      console.log(data);
+    }
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+    output.innerText =
+      "❌ Error generating caption.";
+
+  }
+
+}
+
+// Generate Button
+document
+  .getElementById("generate-caption-btn")
+  .addEventListener(
+    "click",
+    generateCaption
+  );
+
+// Copy Button
+document
+  .getElementById("copy-caption-btn")
+  .addEventListener(
+    "click",
+    () => {
+
+      const caption =
+        document.getElementById(
+          "caption-output"
+        ).innerText;
+
+      navigator.clipboard.writeText(
+        caption
+      );
+
+      alert(
+        "Caption copied!"
+      );
+
+    }
+  );
 
