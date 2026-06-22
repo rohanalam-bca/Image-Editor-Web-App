@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="mobile.css">
+    <link rel="stylesheet" href="AI.css">
+    <link rel="stylesheet" href="design.css">
 </head>
 
 <body>
@@ -16,7 +18,7 @@
         <section>
             <div class="left">
                 <div class="top">
-                    <label for="image-input" id="white" class="btn">
+                    <label for="image-input" id="white" class="newbtn" class="btn">
                         Choose image
                         <input type="file" id="image-input" accept="image/*" hidden>
                     </label>
@@ -79,8 +81,43 @@
                     <div class="filter">
 
                     </div>
-                </div>
 
+                </div>
+<div class="caption-section">
+
+    <h3>✨ AI Caption Generator</h3>
+
+    <select id="caption-style">
+
+        <option value="Modern">Modern</option>
+
+        <option value="Aesthetic">Aesthetic</option>
+
+        <option value="Classic">Classic</option>
+
+        <option value="Professional">Professional</option>
+
+        <option value="Luxury">Luxury</option>
+
+        <option value="Motivational">Motivational</option>
+
+        <option value="Minimalist">Minimalist</option>
+
+    </select>
+
+    <button class="btn" id="generate-caption-btn">
+        Generate Caption
+    </button>
+
+    <div id="caption-output">
+        Your caption will appear here...
+    </div>
+
+    <button class="btn" id="copy-caption-btn">
+        Copy Caption
+    </button>
+
+</div>
 
         </section>
 
