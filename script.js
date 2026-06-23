@@ -1061,7 +1061,7 @@ redoBtn.addEventListener("click", () => {
 // ================================
 
 // Use your Gemini API Key
-const GEMINI_API_KEY = "AQ.Ab8RN6IlX_eID-Sr4kae28mNXhF51xeXPLGRTzzdUdXApNXUyQ";
+const GEMINI_API_KEY = "AQ.Ab8RN6JAgUh7sNcJE-PJzooCSyB2RU-7ZGoi4cK4B78KcIC3yA";
 
 // Convert image file to Base64
 function fileToBase64(file) {
